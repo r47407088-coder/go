@@ -26,8 +26,19 @@ func main() {
 	if err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Fatal("Error starting server:", err)
 	}
+
+	http.HandleFunc("/test", test)
 }
 
 func serveHello(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, page)
+}
+func test (w http.ResponseWriter , r *http.Request){
+	
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	
+	fmt.Fprint(w, "hello")
 }
